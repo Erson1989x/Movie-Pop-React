@@ -5,9 +5,11 @@ import Search from "./components/Navbar/Search";
 import NumResult from "./components/Navbar/NumResult";
 import { tempMovieData } from "../src/utils/tempMovieData";
 import { tempWatchedData } from "../src/utils/tempWatchedData";
-import ListBox from "./components/Hero/ListBox";
-import WatchBox from "./components/Hero/WatchBox";
+import Box from "./components/Hero/Box";
 import MovieList from "./components/Hero/MovieList";
+import Summary from "./components/Hero/Summary";
+import { average } from "./utils/fuctions";
+import WatchList from "./components/Hero/WatchList";
 
 export default function App() {
   const [movies, setMovies] = useState(tempMovieData);
@@ -20,10 +22,13 @@ export default function App() {
         <NumResult movies={movies} />
       </Navbar>
       <Hero>
-        <ListBox>
+        <Box>
           <MovieList movies={movies} />
-        </ListBox>
-        <WatchBox movies={movies} watched={watched} />
+        </Box>
+        <Box>
+        <Summary watched={watched} average={average}/>
+        <WatchList watched={watched} />
+        </Box>
       </Hero>
     </>
   );
