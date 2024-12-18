@@ -1,14 +1,11 @@
 import React from 'react'
-import ListBox from './ListBox';
-import WatchBox from './WatchBox';
-import { average } from '../../utils/fuctions';
 
-const Hero = ( { movies, watched } ) => {
+
+const Hero = ( { children } ) => {
 
   return (
     <main className="main">
-    <ListBox movies={movies}/>
-    <WatchBox watched={watched} average={average} />
+      {children}
   </main>
   )
 }
