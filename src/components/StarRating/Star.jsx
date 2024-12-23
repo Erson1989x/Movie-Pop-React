@@ -6,9 +6,15 @@ const starStyle = {
   display: "block",
   cursor: "pointer",
 };
-const Star = ({ onClick, full }) => {
+const Star = ({ onClick, full, onHoverIn, onHoverOut }) => {
   return (
-    <span style={starStyle} role="button" onClick={onClick}>
+    <span
+      style={starStyle}
+      role="button"
+      onClick={onClick}
+      onMouseEnter={onHoverIn}
+      onMouseLeave={onHoverOut}
+    >
       {full ? (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -38,15 +44,3 @@ const Star = ({ onClick, full }) => {
 };
 
 export default Star;
-
-/*
-FULL STAR
-
-
-
-
-EMPTY STAR
-
-
-
-*/
