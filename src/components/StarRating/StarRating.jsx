@@ -1,4 +1,6 @@
 import React from 'react'
+import Star from '../StarRating/Star'
+import { useState } from 'react'
 
 const containerStyle = {
     display: 'flex',
@@ -8,7 +10,6 @@ const containerStyle = {
 
 const starContainerStyle = {
     display: 'flex',
-    gap: '4px'
 }
 
 const textStyle = {
@@ -16,17 +17,22 @@ const textStyle = {
     margin: '0'
 }
 const StarRating = ( { maxRating = 5} ) => {
+    const [rating , setRating] = useState(1)
+
+    const handleClick = (rating) => {
+        setRating(rating)
+    }
 
   return (
     <div style={containerStyle}>
         <div style={starContainerStyle}>
             {
                 Array.from({length: maxRating}, (_, i) => 
-                    <span key={i}>⭐️</span>
+                    <Star key={i} onClick={() => handleClick (i + 1)} full={rating >= i + 1}/>
                 )
             }
         </div>
-        <p style={textStyle}>10</p>
+        <p style={textStyle}>{rating || ' '}</p>
     </div>
   )
 }
