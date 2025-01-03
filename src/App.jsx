@@ -30,6 +30,14 @@ export default function App() {
     setSelectedId(null);
   };
 
+  const handleAddWatch = (movie) => {
+    setWatched((watched) => [...watched, movie]);
+  }
+
+  const handleDeleteWatch = (id) => {
+    setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
+  }
+
   useEffect(() => {
     const fetchMovies = async () => {
       try {
@@ -100,11 +108,11 @@ export default function App() {
         </Box>
         <Box>
           {selectedId ? (
-            <MovieDetails selectedId={selectedId} handleCloseMovie={handleCloseMovie} KEY={KEY} />
+            <MovieDetails watched={watched} selectedId={selectedId} handleCloseMovie={handleCloseMovie} KEY={KEY} handleAddWatch={handleAddWatch} />
           ) : (
             <>
               <Summary watched={watched} average={average} />
-              <WatchList watched={watched} />
+              <WatchList watched={watched} handleDeleteWatch={handleDeleteWatch} />
             </>
           )}
         </Box>

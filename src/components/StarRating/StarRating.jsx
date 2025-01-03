@@ -31,12 +31,14 @@ const StarRating = ({
   className = "",
   message = [],
   defaultRating = 0,
+  setUserRating,
 }) => {
   const [rating, setRating] = useState(defaultRating);
   const [tempRating, setTempRating] = useState(0);
 
   const handleClick = (rating) => {
     setRating(rating);
+    setUserRating(rating);
   };
 
   const textStyle = {

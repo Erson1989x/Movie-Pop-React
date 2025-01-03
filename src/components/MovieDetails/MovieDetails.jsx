@@ -1,11 +1,23 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import StarRating from "../StarRating/StarRating"
+import StarRating from "../StarRating/StarRating";
 import Loader from "../Loader/Loader";
 
-const MovieDetails = ({ selectedId, handleCloseMovie, KEY }) => {
+const MovieDetails = ({
+  selectedId,
+  handleCloseMovie,
+  KEY,
+  handleAddWatch,
+  watched,
+}) => {
   const [movie, setMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [userRating, setUserRating] = useState("");
+
+  const isWatched = watched.map((movie) => movie.imbdID).includes(selectedId);
+  const watchedUserRating = watched.find(
+    (movie) => movie.imbdID === selectedId
+  )?.userRating;
 
   const {
     Title: title,
@@ -14,12 +26,26 @@ const MovieDetails = ({ selectedId, handleCloseMovie, KEY }) => {
     Runtime: runtime,
     Genre: genre,
     Plot: plot,
-    imbdRating: imdbRating,
+    imdbRating: imdbRating,
     Released: released,
     Actors: actors,
     Director: director,
     Country: country,
   } = movie;
+
+  const handleAdd = () => {
+    const newMovie = {
+      imbdID: selectedId,
+      title,
+      year,
+      poster,
+      runtime: Number(runtime.split(" ").at(0)),
+      imdbRating: Number(imdbRating),
+      userRating,
+    };
+    handleAddWatch(newMovie);
+    handleCloseMovie();
+  };
 
   useEffect(() => {
     const getMovieDetails = async () => {
@@ -36,36 +62,56 @@ const MovieDetails = ({ selectedId, handleCloseMovie, KEY }) => {
 
   return (
     <div className="details">
-      {isLoading ? <Loader /> : 
-      <>
-      <header>
-        <button className="btn-back" onClick={handleCloseMovie}>
-          &larr;
-        </button>
-        <img src={poster} alt={`poster of ${movie} movie`} />
-        <div className="details-overview">
-          <h2>{title}</h2>
-          <p>
-            {released} &bull; {runtime}
-          </p>
-          <p>{genre}</p>
-          <p>
-            <span>⭐️</span> {imdbRating} IMDb rating
-          </p>
-        </div>
-      </header>
-      <section>
-        <div className="rating">
-        <StarRating maxRating={10} size="24px" />
-        </div>
-        <p>
-          <em>{plot}</em>
-        </p>
-        <p>Starring: {actors}</p>
-        <p>Directed by: {director}</p>
-        <p>Country: {country}</p>
-      </section>
-      </>}
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <>
+          <header>
+            <button className="btn-back" onClick={handleCloseMovie}>
+              &larr;
+            </button>
+            <img src={poster} alt={`poster of ${movie} movie`} />
+            <div className="details-overview">
+              <h2>{title}</h2>
+              <p>
+                {released} &bull; {runtime}
+              </p>
+              <p>{genre}</p>
+              <p>
+                <span>⭐️</span> {imdbRating} IMDb rating
+              </p>
+            </div>
+          </header>
+          <section>
+            <div className="rating">
+              {!isWatched ? (
+                <>
+                  <StarRating
+                    maxRating={10}
+                    size="24px"
+                    setUserRating={setUserRating}
+                  />
+                  {userRating > 0 && (
+                    <button className="btn-add" onClick={handleAdd}>
+                      + Add to list
+                    </button>
+                  )}
+                </>
+              ) : (
+                <p>
+                  You rated this movie - {watchedUserRating} <span>⭐️</span>
+                </p>
+              )}
+            </div>
+            <p>
+              <em>{plot}</em>
+            </p>
+            <p>Starring: {actors}</p>
+            <p>Directed by: {director}</p>
+            <p>Country: {country}</p>
+          </section>
+        </>
+      )}
     </div>
   );
 };
