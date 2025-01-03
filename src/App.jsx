@@ -12,19 +12,21 @@ import Loader from "./components/Loader/Loader";
 import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
 
 export default function App() {
+  const [query, setQuery] = useState("interstellar");
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
   const KEY = "c0d89336";
-  const query = "superman";
+
 
 
   useEffect(() => {
     const fetchMovies = async () => {
       try {
         setIsLoading(true);
+        setError("");
         const res = await fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=${query}`);
 
         if(!res.ok) {
@@ -34,6 +36,7 @@ export default function App() {
         const data = await res.json();
 
         if(data.Response === "False") {
+          console.log('API response:', data);
           throw new Error("Movie not found");
         }
 
@@ -47,8 +50,14 @@ export default function App() {
       }
     };
 
+    if(query.length < 3) {
+      setMovies([]);
+      setError("");
+      return;
+    }
+
     fetchMovies();
-  }, []);
+  }, [query]);
 
   /*
   useEffect(() => {
@@ -61,7 +70,7 @@ export default function App() {
   return (
     <>
       <Navbar>
-        <Search />
+        <Search query={query} setQuery={setQuery} />
         <NumResult movies={movies} />
       </Navbar>
       <Hero>
@@ -77,7 +86,7 @@ export default function App() {
         <Box>
           {/*isLoading ? <Loader /> : <MovieList movies={movies} />*/}
           {isLoading && <Loader />}
-          {isLoading && !error && <MovieList movies={movies} />}
+          {!isLoading && !error && <MovieList movies={movies} />}
           {error && <ErrorMessage message={error} />}
         </Box>
         <Box>
