@@ -9,14 +9,16 @@ import Summary from "./components/Hero/Summary";
 import { average } from "./utils/fuctions";
 import WatchList from "./components/Hero/WatchList";
 import Loader from "./components/Loader/Loader";
+import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
 
 export default function App() {
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const KEY = "c0d89336";
-  const query = "man";
+  const query = "superman";
 
 
   useEffect(() => {
@@ -24,11 +26,24 @@ export default function App() {
       try {
         setIsLoading(true);
         const res = await fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=${query}`);
+
+        if(!res.ok) {
+          throw new Error("Something went wrong");
+        }
+
         const data = await res.json();
+
+        if(data.Response === "False") {
+          throw new Error("Movie not found");
+        }
+
         setMovies(data.Search);
-        setIsLoading(false);
+  
       } catch (err) {
-        console.error(err);
+        console.error(err.message);
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -60,7 +75,10 @@ export default function App() {
           }
         />*/}
         <Box>
-          {isLoading ? <Loader /> : <MovieList movies={movies} />}
+          {/*isLoading ? <Loader /> : <MovieList movies={movies} />*/}
+          {isLoading && <Loader />}
+          {isLoading && !error && <MovieList movies={movies} />}
+          {error && <ErrorMessage message={error} />}
         </Box>
         <Box>
           <Summary watched={watched} average={average} />
