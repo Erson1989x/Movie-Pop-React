@@ -48,6 +48,18 @@ const MovieDetails = ({
   };
 
   useEffect(() => {
+    const callback = (e) => {
+      if (e.code === "Escape") {
+        handleCloseMovie();
+      }
+    };
+    document.addEventListener("keydown", callback);
+    return () => {
+      document.removeEventListener("keydown", callback);
+    };
+  }, [handleCloseMovie]);
+
+  useEffect(() => {
     const getMovieDetails = async () => {
       setIsLoading(true);
       const res = await fetch(
@@ -61,17 +73,14 @@ const MovieDetails = ({
   }, [selectedId]);
 
   useEffect(() => {
-    if(!title) return
+    if (!title) return;
 
-    document.title = `Movie | ${title}`
+    document.title = `Movie | ${title}`;
 
     return () => {
       document.title = "MoviePop";
-    }
-  }, [title])
-
-
-
+    };
+  }, [title]);
 
   return (
     <div className="details">
