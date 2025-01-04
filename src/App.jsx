@@ -35,8 +35,9 @@ export default function App() {
   }
 
   const handleDeleteWatch = (id) => {
-    setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
-  }
+    setWatched((prevWatched) => prevWatched.filter((movie) => movie.imdbID !== id));
+  };
+  
 
   useEffect(() => {
     const fetchMovies = async () => {
