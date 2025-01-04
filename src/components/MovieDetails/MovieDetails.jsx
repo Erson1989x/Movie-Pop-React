@@ -60,6 +60,19 @@ const MovieDetails = ({
     getMovieDetails();
   }, [selectedId]);
 
+  useEffect(() => {
+    if(!title) return
+
+    document.title = `Movie | ${title}`
+
+    return () => {
+      document.title = "MoviePop";
+    }
+  }, [title])
+
+
+
+
   return (
     <div className="details">
       {isLoading ? (
