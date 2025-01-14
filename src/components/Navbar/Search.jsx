@@ -1,33 +1,22 @@
 import React, { useEffect, useRef } from 'react'
+import useKey from '../../Hooks/useKey'
 
 
 const Search = ({query, setQuery}) => {
   const inputEl = useRef(null)
 
-  useEffect(() => {
+  useKey('Enter', () => {
+    if(document.activeElement === inputEl.current) return
+    inputEl.current.focus();
+    setQuery("");
 
-    const callback = (e) => {
+  })
 
-      if(document.activeElement === inputEl.current) return
-
-      if(e.code === "Enter") {
-        inputEl.current.focus();
-        setQuery("");
-      }
-    }
-
-    document.addEventListener('keydown', callback);
-    return () => {
-      document.removeEventListener('keydown', callback);
-    }
-  }, [setQuery])
  // useEffect(() => {
  //   const el = document.querySelector('.search');
  //   console.log(el);
  //   el.focus();
  // }, [])
-
-
 
   return (
     <input

@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { useEffect, useState } from "react";
 import StarRating from "../StarRating/StarRating";
 import Loader from "../Loader/Loader";
-
+import { useKey } from "../../Hooks/useKey";
 const MovieDetails = ({
   selectedId,
   handleCloseMovie,
@@ -55,17 +55,7 @@ const MovieDetails = ({
     handleCloseMovie();
   };
 
-  useEffect(() => {
-    const callback = (e) => {
-      if (e.code === "Escape") {
-        handleCloseMovie();
-      }
-    };
-    document.addEventListener("keydown", callback);
-    return () => {
-      document.removeEventListener("keydown", callback);
-    };
-  }, [handleCloseMovie]);
+  useKey( "Escape", handleCloseMovie );
 
   useEffect(() => {
     const getMovieDetails = async () => {
